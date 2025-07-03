@@ -103,6 +103,8 @@ export const env = createEnv({
     LINEAR_CLIENT_SECRET: z.string().optional(),
     SLACK_CLIENT_ID: z.string().optional(),
     SLACK_CLIENT_SECRET: z.string().optional(),
+    REDTAIL_API_KEY: z.string().optional(),
+    REDTAIL_USER_KEY: z.string().optional(),
     SOCKET_SERVER_URL: z.string().url().optional(),
   },
 

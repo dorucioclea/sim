@@ -134,6 +134,7 @@ export interface RedtailOutput {
   accounts?: RedtailAccount[]
   meta?: RedtailApiMeta
   success?: boolean
+  warnings?: string[]
   metadata: RedtailToolMetadata
 }
 
@@ -142,31 +143,30 @@ export interface RedtailResponse extends ToolResponse {
 }
 
 export interface RedtailReadParams {
-  accessToken: string
   operation: Extract<RedtailOperation, 'read_note' | 'read_contact' | 'read_account'>
   noteId?: number        
   contactId?: number
   accountId?: number
   include?: string
   recentlyViewed?: boolean
+  page?: number
+  includeAssets?: boolean
 }
 
 export interface RedtailWriteParams {
-  accessToken: string
   operation: Extract<RedtailOperation, 'write_note' | 'write_contact'>
-  noteId?: number
   contactId?: number
-  categoryId?: number
-  noteType?: number
-  pinned?: boolean
-  draft?: boolean
-  body?: string
-  noteAssociations?: Array<{
-    noteable_id: number
-    noteable_type: string
-  }>
+  contactNote?: string
+  noteAssociations?: Array<{ noteable_id: number; noteable_type: string }>
+  // Write contact parameters
   firstName?: string
   lastName?: string
-  backgroundInformation?: string
   contactEmailAddress?: string
+  contactPhoneNumber?: string
+  middleName?: string
+  taxId?: string
+  dateOfBirth?: string
+  sourceId?: number
+  statusId?: number
+  categoryId?: number
 }

@@ -1,4 +1,5 @@
 import { createLogger } from '@/lib/logs/console-logger'
+import { env } from '@/lib/env'
 import type { ToolConfig } from '../types'
 import type { RedtailResponse, RedtailReadParams } from './types'
 
@@ -10,11 +11,11 @@ export const redtailReadNoteTool: ToolConfig<RedtailReadParams, RedtailResponse>
   description: 'Read content from a Redtail note',
   version: '1.0.0',
   params: {
-    accessToken: {
-      type: 'string',
-      required: true,
-      description: 'The access token for the Redtail API',
-    },
+    // accessToken: {
+    //   type: 'string',
+    //   required: true,
+    //   description: 'The access token for the Redtail API',
+    // },
     contactId: {
       type: 'dropdown',
       required: true,
@@ -30,13 +31,20 @@ export const redtailReadNoteTool: ToolConfig<RedtailReadParams, RedtailResponse>
         return `https://review.crm.redtailtechnology.com/api/public/v1/contacts/${contactId}/notes`
     },
     method: 'GET',
-    headers: (params) => {
-      if (!params.accessToken) {
-        throw new Error('Access token is required')
+    headers: () => {
+      const apiKey = env.REDTAIL_API_KEY
+      const userKey = env.REDTAIL_USER_KEY
+      
+      if (!apiKey || !userKey) {
+        throw new Error('Redtail credentials not configured. Please set REDTAIL_API_KEY and REDTAIL_USER_KEY environment variables.')
       }
-
+      
+      // Format: "APIKey:UserKey" 
+      const credentials = `${apiKey}:${userKey}`
+      const encodedCredentials = Buffer.from(credentials).toString('base64')
+      
       return {
-        Authorization: `Bearer ${params.accessToken}`,
+        Authorization: `UserKeyAuth ${encodedCredentials}`,
         'Content-Type': 'application/json',
       }
     },

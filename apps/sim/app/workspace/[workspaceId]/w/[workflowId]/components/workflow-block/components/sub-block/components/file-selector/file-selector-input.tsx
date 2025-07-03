@@ -20,6 +20,8 @@ import type { JiraIssueInfo } from './components/jira-issue-selector'
 import { JiraIssueSelector } from './components/jira-issue-selector'
 import type { MicrosoftFileInfo } from './components/microsoft-file-selector'
 import { MicrosoftFileSelector } from './components/microsoft-file-selector'
+import type { RedtailContactInfo } from './components/redtail-contact-selector'
+import { RedtailContactSelector } from './components/redtail-contact-selector'
 import type { TeamsMessageInfo } from './components/teams-message-selector'
 import { TeamsMessageSelector } from './components/teams-message-selector'
 
@@ -54,6 +56,8 @@ export function FileSelectorInput({
   const [messageInfo, setMessageInfo] = useState<TeamsMessageInfo | null>(null)
   const [selectedCalendarId, setSelectedCalendarId] = useState<string>('')
   const [calendarInfo, setCalendarInfo] = useState<GoogleCalendarInfo | null>(null)
+  const [selectedContactId, setSelectedContactId] = useState<string>('')
+  const [contactInfo, setContactInfo] = useState<RedtailContactInfo | null>(null)
 
   // Get provider-specific values
   const provider = subBlock.provider || 'google-drive'
@@ -63,6 +67,7 @@ export function FileSelectorInput({
   const isMicrosoftTeams = provider === 'microsoft-teams'
   const isMicrosoftExcel = provider === 'microsoft-excel'
   const isGoogleCalendar = subBlock.provider === 'google-calendar'
+  const isRedtail = provider === 'redtail'
   // For Confluence and Jira, we need the domain and credentials
   const domain = isConfluence || isJira ? (getValue(blockId, 'domain') as string) || '' : ''
   // For Discord, we need the bot token and server ID
@@ -85,6 +90,8 @@ export function FileSelectorInput({
           setSelectedMessageId(value)
         } else if (isGoogleCalendar) {
           setSelectedCalendarId(value)
+        } else if (isRedtail) {
+          setSelectedContactId(value)
         } else {
           setSelectedFileId(value)
         }
@@ -100,6 +107,8 @@ export function FileSelectorInput({
           setSelectedMessageId(value)
         } else if (isGoogleCalendar) {
           setSelectedCalendarId(value)
+        } else if (isRedtail) {
+          setSelectedContactId(value)
         } else {
           setSelectedFileId(value)
         }
@@ -113,6 +122,7 @@ export function FileSelectorInput({
     isDiscord,
     isMicrosoftTeams,
     isGoogleCalendar,
+    isRedtail,
     isPreview,
     previewValue,
   ])
@@ -149,6 +159,13 @@ export function FileSelectorInput({
     setSelectedCalendarId(calendarId)
     setCalendarInfo(info || null)
     setStoreValue(calendarId)
+  }
+
+  // Handle contact selection
+  const handleContactChange = (contactId: string, info?: RedtailContactInfo) => {
+    setSelectedContactId(contactId)
+    setContactInfo(info || null)
+    setStoreValue(contactId)
   }
 
   // For Google Drive
@@ -366,6 +383,20 @@ export function FileSelectorInput({
           )}
         </Tooltip>
       </TooltipProvider>
+    )
+  }
+
+  // Render Redtail contact selector
+  if (isRedtail) {
+    return (
+      <RedtailContactSelector
+        value={selectedContactId}
+        onChange={handleContactChange}
+        label={subBlock.placeholder || 'Search and select a contact'}
+        disabled={disabled}
+        showPreview={true}
+        onContactInfoChange={setContactInfo}
+      />
     )
   }
 

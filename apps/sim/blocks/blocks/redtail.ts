@@ -26,16 +26,16 @@ export const RedtailBlock: BlockConfig<RedtailResponse> = {
         { label: 'Read Account', id: 'read_account' },
       ],
     },
-    {
-      id: 'credential',
-      title: 'Redtail Account',
-      type: 'oauth-input',
-      layout: 'full',
-      provider: 'redtail',
-      serviceId: 'redtail',
-      requiredScopes: [],
-      placeholder: 'Select Redtail account',
-    },
+    // {
+    //   id: 'credential',
+    //   title: 'Redtail Account',
+    //   type: 'oauth-input',
+    //   layout: 'full',
+    //   provider: 'redtail',
+    //   serviceId: 'redtail',
+    //   requiredScopes: [],
+    //   placeholder: 'Select Redtail account',
+    // },
     {
       id: 'contactId',
       title: 'Select Contact',
@@ -45,7 +45,7 @@ export const RedtailBlock: BlockConfig<RedtailResponse> = {
       serviceId: 'redtail',
       requiredScopes: [],
       placeholder: 'Search and select a contact',
-      condition: { field: 'operation', value: ['read_contact', 'read_account', 'read_note'] },
+      condition: { field: 'operation', value: ['read_contact', 'read_account', 'read_note', 'write_note'] },
     },
     {
       id: 'firstName',
@@ -114,12 +114,13 @@ export const RedtailBlock: BlockConfig<RedtailResponse> = {
         }
       },
       params: (params) => {
-        const { credential, operation, ...rest } = params
+        // const { credential, operation, ...rest } = params
+        const { operation, ...rest } = params
 
         // Build the parameters based on operation type
         const baseParams = {
           ...rest,
-          accessToken: credential,
+          // accessToken: credential,
           operation,
         }
 
@@ -152,7 +153,7 @@ export const RedtailBlock: BlockConfig<RedtailResponse> = {
   },
   inputs: {
     operation: { type: 'string', required: true },
-    credential: { type: 'string', required: true },
+    // credential: { type: 'string', required: true },
     noteId: { type: 'number', required: false },
     contactId: { type: 'number', required: false },
     firstName: { type: 'string', required: false },
