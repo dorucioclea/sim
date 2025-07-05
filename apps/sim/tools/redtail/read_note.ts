@@ -11,11 +11,11 @@ export const redtailReadNoteTool: ToolConfig<RedtailReadParams, RedtailResponse>
   description: 'Read content from a Redtail note',
   version: '1.0.0',
   params: {
-    // accessToken: {
-    //   type: 'string',
-    //   required: true,
-    //   description: 'The access token for the Redtail API',
-    // },
+    accessToken: {
+      type: 'string',
+      required: true,
+      description: 'The access token for the Redtail API',
+    },
     contactId: {
       type: 'dropdown',
       required: true,
